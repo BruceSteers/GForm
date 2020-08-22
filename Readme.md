@@ -19,7 +19,7 @@ you can create a HBox and add objects to that horizontally.
 currently supported objects are...
 Button, ToggleButton, TextBox (InputBox), CheckBox, ListBox, 
 DirBox, FontBox, ComboBox, Label, HBox, Spring
-
+<pre>
 Arguments are....
 (Runtime args when launching GForm)
 
@@ -85,7 +85,7 @@ message="Message text" , pops open a message window
 stop or start , pauses the gui sending your script messages while you alter objects.
 
 quit or close , closes the GUI
-
+</pre>
 Provided is a demo bash script.
 
 The GForm.gambas program is run from within the script with a few args to make a GUI.
