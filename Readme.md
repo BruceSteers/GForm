@@ -98,11 +98,15 @@ A Snapshot.png image is in the folder. the arguments for this were...
 tbutton="B1|Hello|on" input="Inp3|some text" box tbutton="B2|Goodbye" button="B3|oooh" unbox button="b4|well then" box label="This box" input="I3|more txt" label="another label" input="I4|will 2 be ok" unbox box checkbox="cb1|Check box this|on" combobox="cmb1|l1,list 2,the third|2" unbox button="BQ|Quit|close" pipe=/tmp/fifo1
 
 Like i said, lots to add to this.
-Vertical layout features/objects are missing (like vbox and multi-line labels,textareas,lists,etc)
-because i've not written the routines yet to work out the apps height.
-currently it's working things out simply.
+Vertical layout features/objects are missing because i've not written the routines yet to 
+work out the apps height. currently it's working things out simply.
 also plan to make it useable like zenity where it doesn't create the pipe and just 
 gives all the data when closed.
+
+Included is the gambas basic source code
+This is currently beta , some features do not work and you may find some bugs.
+
+SEE THE EXAMPLE SCRIPTS FOR INFO ON HOW TO MAKE YOUR OWN SHELL GUI APP.
 
 Bruce
 
