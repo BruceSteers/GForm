@@ -45,7 +45,8 @@ label="text" , makes a label.
 For all above objects, 'flags' can be..
 'on' for toggle button or checkbox state on load, 
 'disabled' disables object, 
-'hidden' hides the object, 'stretch' or 'nostretch' forces object resizing
+'hidden' hides the object, 
+'stretch' or 'nostretch' forces object resizing
 'close' or 'quit' makes button close GUI after pressed
 
 spring , adds a spring, place to push objects, eg. "box spring button unbox" will push button to the right.
