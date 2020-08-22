@@ -1,0 +1,8 @@
+You will need...
+
+The main executable GForm (on repository main page)
+
+The gambas3 runtime installed
+
+Download the Test_GForm example scripts to see usage like how to use the pipes for comunuication between the GUI and the script.
+
