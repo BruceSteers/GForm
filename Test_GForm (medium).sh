@@ -14,8 +14,8 @@ NameList=${txt#,*} ; ListIndex=0
 # as each line is each row in the form. note, using option 'quiet' to
 # suppress any stdout message unlike the 'Test_GForm (simple).sh' example.
 
-./GForm quiet font="Carlito,14,Italic" pipe="/tmp/fifo1" listen="/tmp/fifo2" title="GForm shell scrip example" \
-box button="btn1|Button 1" spring unbox \
+./GForm quiet font="Carlito,14,Italic" pipe="/tmp/fifo1" listen="/tmp/fifo2" title="GForm shell script example" \
+box button="btnAdd|Add Name" button="btnDel|Del Name" spring unbox \
 box label="Modify name" input="inp1|Fred" unbox \
 box checkbox="c1|Got a check box too|on" combobox="cb1|$NameList|0|stretch" unbox \
 listbox="lb1|$NameList" \
@@ -41,12 +41,12 @@ for s in "${NameArray[@]}"; do txt="$txt,$s"; done
 NameList=${txt#,*}
 }
 
-Alert() {  # just using Gform to pop a message
+Alert() {  # just using the GUI to pop a message
 if [ "$2" = "w" ]; then
-Send "disable" # put main gui to sleep while message opens
+Send "disable"
 gbr3 GForm quiet toponly title="Notice.." label="$1" button="|Okay|close" 2>/dev/null
 Send "enable"
-sleep 0.2  # give the GUI a moment to become enabled or messages can be missed
+sleep 0.3 # give the GUI a moment to become enabled again
 else
 gbr3 GForm quiet toponly title="Notice.." label="$1" button="|Okay|close" 2>/dev/null&false
 fi
@@ -78,13 +78,32 @@ fi
 # message has now been split into $CName , $CText and $CData
 # so we can add our procedures here according to the GUI data.
 
-if [ "$CName" = "btn1" ]; then 
-  Alert "number 1 got pressed.\ni'll toggle the checkbox" "w" # using "w" disables main gui
- 
- # Send a command to the GUI. Note, sending 'stop' <command> then 'start'
- # stops the GUI sending event messages while we alter things.
+if [ "$CName" = "btnAdd" ]; then 
+ListIndex="${#NameArray[@]}"
+if [ "$NameList" = "" ]; then 
+Send "enable=btnDel"; sleep 0.1; fi
 
-  Send "stop\nsetvalue=c1\nstart"
+NameArray+=( "New Name" )
+ArrayToList
+Send "stop\nsetlist=lb1|$NameList\nsetlist=cb1|$NameList\nstart\nsetindex=lb1|$ListIndex"
+
+elif [ "$CName" = "btnDel" ]; then 
+if [ ${#NameArray[@]} -eq 1 ]; then
+NameArray=( ) ; NameList=""
+else
+NameArray=( "${NameArray[@]:0:$((ListIndex))}" "${NameArray[@]:$ListIndex+1}" )
+ArrayToList
+fi
+
+if [ "$ListIndex" -ge ${#NameArray[@]} ]; then ((ListIndex--)); fi
+
+Send "setlist=lb1|$NameList\nsetlist=cb1|$NameList\n"\
+"setindex=lb1|$ListIndex"
+#echo $NameArray 
+if [ "$NameList" = "" ]; then 
+sleep 0.2
+Send "disable=btnDel\n"\
+"settext=inp1|"; fi
 
 elif [ "$CName" = "c1" ]; then
  Alert "The Checkbox $CName it's now '$CData'" "w"
@@ -93,22 +112,24 @@ elif [ "$CName" = "inp1" ]; then
 NameArray[$ListIndex]="$CText"
 TMP=$ListIndex
 ArrayToList
-Send "stop\nsetlist=lb1=$NameList\nsetlist=cb1=$NameList\nsetindex=cb1=$TMP\nstart"
+Send "stop\nsetlist=lb1|$NameList\nsetlist=cb1|$NameList\nsetindex=cb1|$TMP\nstart"
 
 elif [ "$CName" = "fnt1" ]; then
 Send "mainfont=$CText"
 
 elif [ "$CName" = "lb1" ]; then
  ListIndex=$CData
- Send "settext=inp1=$CText\nstop\nsetindex=cb1=$ListIndex\nstart"
+ Send "settext=inp1|$CText\nstop\nsetindex=cb1|$ListIndex\nstart"
 
 elif [ "$CName" = "cb1" ]; then
  ListIndex=$CData       # Remember the list position
- Send "settext=inp1=$CText\nstop\nsetindex=lb1=$ListIndex\nstart"
+ Send "settext=inp1|$CText\nstop\nsetindex=lb1|$ListIndex\nstart"
 
 elif [ "$CName" = "BQ" ]; then
  Alert "You've Exited." "w"
  CleanUp
+else
+Alert "unknown message\n$PipeText" "w"
 fi
 
 }
