@@ -28,6 +28,7 @@ width=<n> , manually define a window width
 font=font name , Sets the main form font Eg 'Carlito,14,Italic'
 noresize , makes form non resizable
 topmost or toponly , forces window to stay above others.
+return=<mode> ; set behaviour if not using the pipe feature, can be 'name', 'text' or 'all'
 
 box , makes a Horizontal box, subsequent objects go in the box horizontally until unboxed
 unbox , finishes the box
@@ -40,14 +41,17 @@ fontbox="name|FontName|flags"
 dirbox="name|path|flags" , makes a dirbox derectory chooser
 combobox="name|comma,seperated,list|index|flags" , makes a read-only combobox, index is selected number
 listbox="name|comma,seperated,list|index|flags" , makes a list box, index is selected number
-label="text" , makes a label.
+label="name|text" , makes a label.
 
 For all above objects, 'flags' can be..
 'on' for toggle button or checkbox state on load, 
 'disabled' disables object, 
 'hidden' hides the object, 
-'stretch' or 'nostretch' forces object resizing
-'close' or 'quit' makes button close GUI after pressed
+'stretch' or 'nostretch' forces object resizing or not
+'readonly' for input box (or any other control that supports it)
+'left' 'right' or 'center' for text alignment
+
+'close' or 'quit' makes button close GUI after pressed , Note
 
 spring , adds a spring, place to push objects, eg. "box spring button unbox" will push button to the right.
 
@@ -64,7 +68,9 @@ setlistitem=object_name=text=number  , changes a single numbered item text in ei
 hide=object_name , hides named object, use 'hide' alone to hide main wiindow
 show=object name, opposite of hide
 disable=object_name , disables named object, use 'disable' alone to disable main wiindow
+dislist=lit|of|object|names , disables all objects in the list
 enable=object_name , opposite of disable
+enlist=lit|of|object|names , enables all objects in the list
 setfont=object_name|font , sets font for an object
 getfont=object_name , gets font name for an object
 setfocus=object_name , make object active
@@ -84,28 +90,38 @@ dialog=opendir|/home/|showhidden
 
 message="Message text" , pops open a message window
 stop or start , pauses the gui sending your script messages while you alter objects.
+hold or unhold , stops/starts gui processing internal events like button presses.
+check , makes GUI reply 'check' , use this to check if there are any messages backlogged in the pipe.
+Ie , send the command 'check' to the gui then read the reply, it should just be 'check' messaged back, 
+  if not then there was a command waiting, so proccess the command and read the pipe line again until it reads 'check'
 
 quit or close , closes the GUI
 </pre>
-Provided is a demo bash script.
 
-The GForm.gambas program is run from within the script with a few args to make a GUI.
+Provided is a few demo bash scripts.
+
+The GForm.gambas program is run from within the scripts with a few args to make a GUI.
 The pipe=/tmp/fifo1 argument makes the app create a pipe that the script then opens and
 waits for messages from the GUI.
-
 Messages come in the form of name|text or name|text|value depending on the calling object
+
+There are 3 pipe mode examples. Simple, Medium and advanced.
+The simple example greates a GUI and simply listens for events, making the script react in various ways.
+The medium example is more complex in that as well as a pipe being read by the script monitoring 
+messages from the GUI the script is also sending messages back to the GUI to alter objects.
+
+The advanced script is a fully working application that will manage a pkexec policy rule file.
+It lists the rules, lets you modify/add or delete rules and then save the changes.
+This is not a 'Gambas' application it is a shell script using a gambas application GForm to create it's GUI.
+
+There is a simple example showing how to use GForm as a simple button choice requester.
+The advantages with GForm over Zenity being able to use multiple rows of buttons.
 
 A Snapshot.png image is in the folder. the arguments for this were...
 tbutton="B1|Hello|on" input="Inp3|some text" box tbutton="B2|Goodbye" button="B3|oooh" unbox button="b4|well then" box label="This box" input="I3|more txt" label="another label" input="I4|will 2 be ok" unbox box checkbox="cb1|Check box this|on" combobox="cmb1|l1,list 2,the third|2" unbox button="BQ|Quit|close" pipe=/tmp/fifo1
 
-Like i said, lots to add to this.
-Vertical layout features/objects are missing because i've not written the routines yet to 
-work out the apps height. currently it's working things out simply.
-also plan to make it useable like zenity where it doesn't create the pipe and just 
-gives all the data when closed.
-
 Included is the gambas basic source code
-This is currently beta , some features do not work and you may find some bugs.
+This is currently beta , some features might not work and you may find some bugs.
 
 SEE THE EXAMPLE SCRIPTS FOR INFO ON HOW TO MAKE YOUR OWN SHELL GUI APP.
 
