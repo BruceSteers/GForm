@@ -1,8 +1,10 @@
 You will need...
 
-The main executable GForm (on repository main page)
+The main executable GForm (on git main page)
 
 The gambas3 runtime installed
+sudo apt-get install -y gambas3-runtime
 
-Download the Test_GForm example scripts to see usage like how to use the pipes for comunuication between the GUI and the script.
+Download the example scripts to see usage like how to use the pipes for comunuication between the GUI and the script.
 
+Happy scripting :)
