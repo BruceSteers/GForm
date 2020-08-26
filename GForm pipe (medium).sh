@@ -126,9 +126,7 @@ Send "setindex=lb1|$ListIndex"
 if [ "$NameList" = "" ]; then 
 sleep 0.2
 Send "disable=btnDel"
-Send "stop"
 Send "settext=inp1|"
-Send "start"
 fi
 
 elif [ "$CName" = "c1" ]; then

@@ -81,12 +81,16 @@ Eg.  'move=20,20,,' moves window to position 'move=,,+20,' grows width by 20
 
 mainfont=font name , changes GUI main font 
 
-dialoge=type|default|flags , opens a requester dialog
+dialog=type|default|flags , opens a requester dialog
 type can be openfile, opendir, savefile, color, font (title sets the title)
-flags can be showhidden or multi
+flags can be showhidden or multi , the dialog will message back the result to the pipe or a blank text.
 Eg.
 dialog=title|Select folder to open...
 dialog=opendir|/home/|showhidden
+read -u 3 NEWAPP
+if [ -z "$NEWAPP" ]; then
+echo "Change path Cancelled.."
+fi
 
 message="Message text" , pops open a message window
 stop or start , pauses the gui sending your script messages while you alter objects.

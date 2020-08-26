@@ -25,16 +25,16 @@ box label="|Descrip[tion" input="desc||disabled" unbox \
 box label="|Message" input="mess||disabled" unbox \
 box label="|Path" input="path||disabled readonly right" button="freq|@|disabled nostretch" unbox \
 box button="add|Add New" button="del|Delete|disabled" combobox="presets|Select a Preset,Pluma,Gambas3,Xed|0" unbox \
-box button="save|Save Changes|disabled" button="rel|Reload (Revert)" spring button="BQ|Quit Button|close"&sleep 1
+box button="save|Save Changes|disabled" button="rel|Reload (Revert)|disabled" spring button="BQ|Quit|close"&sleep 1
 AppOpen=1
 }
 
 CleanUp() {
-AppOpen=0
+AppOpen=0 # the following 'Ask' command needs to know internal 'message' command is no longer usable
 if [ "$CHANGED" -eq 1 ]; then
  Ask "Configuration Changed\nwould you like to save the changes?" "Yes Save" "No Don't"
  if [ $RVAL -eq 1 ]; then
-  Alert "Saving" "w"
+  Alert "Saving"
  fi
 fi
 
@@ -43,7 +43,7 @@ KillFiles
 exit
 }
 
-KillFiles() {
+KillFiles() {  # Make sure the pipe files are gone
 if [ -e "/tmp/fifo2" ]; then
 rm /tmp/fifo2
 fi
@@ -53,33 +53,28 @@ fi
 }
 
 Ask() {  # just using the GUI to pop a question
-RVAL=$(gbr3 GForm return=v allstretch toponly title="Question.." label="$1" box button="1|$2" button="0|$3") #2>/dev/null
+RVAL=$(gbr3 GForm return=v allstretch toponly title="Question.." label="|\n$1\n" box button="1|$2" button="0|$3") #2>/dev/null
 }
 
 Alert() {  
 # just using GForm to pop up a message box. if the GUi is not open it runs a seperate 
 # GForm instance or it uses the running GUI's internal "message" function
 if [ $AppOpen -eq 0 ]; then
-gbr3 GForm quiet toponly title="Notice.." label="$1" button="|Okay|close" 2>/dev/null
+gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close" 2>/dev/null
 return
 fi
-if [ "$2" = "w" ]; then
-Send "disable"
-Send "message=$1" 2>/dev/null
-Send "enable"
-sleep 0.3 # give the GUI a moment to become enabled again
-else
-Send "message=$1" 2>/dev/null
-fi
+Send "message=$1"
 }
 
+# this is run after modifying any data, it enables/disables the save/reload button and
+# sets the CHANGED flag so the app know to ask to save on exit if modifications were made.
 Changes() {
 if [ "$1" = "-1" ]; then
-Send "disable=save"
+Send "dislist=save|rel"
 CHANGED=0
 return
 elif [ $CHANGED -eq 0 ]; then
-Send "enable=save"
+Send "enlist=save|rel"
 CHANGED=1
 fi
 }
@@ -160,7 +155,7 @@ Send "dialog=openfile|/usr/bin/NewApp|showhidden"
 sleep 0.1
 read -u 3 NEWAPP
 if [ -z "$NEWAPP" ]; then
-Alert "Change path Cancelled.." "w"
+Alert "Change path Cancelled.."
 return
 fi
 PTH=$NEWAPP
@@ -168,16 +163,27 @@ FARRAY[$PPOS]="    <annotate key="org.freedesktop.policykit.exec.path">$PTH</ann
 WriteApps
 Changes
 
+elif [ "$CName" = "rel" ]; then
+ReadFile
+ReadApps
+ListIndex=-1
+Send "setlist=lb1|$AppList"
+Send "settext=desc|"
+Send "settext=mess|"
+Send "settext=path|"
+Send "dislist=del|desc|mess|path|freq"
+Changes "-1"
 elif [ "$CName" = "save" ]; then
 SavePFile
 Changes "-1"
 sleep 0.1
 
 elif [ "$CName" = "presets" ]; then
+if [ $CData -eq 0 ]; then return; fi
 AddField "$CText"
- 
+Send "setindex=presets|0"
 elif [ "$CName" = "BQ" ]; then
- Alert "You've Exited." "w"
+ Alert "You've Exited."
  CleanUp
 else
 echo "unknown message\n$PipeText"
@@ -194,17 +200,13 @@ if [ -z $1 ]; then
  sleep 0.1
  read -u 3 NEWAPP
   if [ -z "$NEWAPP" ]; then
-   Alert "Adding Cancelled.." "w"
+   Alert "Adding Cancelled.."
   return
   fi
  ANAME=${NEWAPP##*/}
  else
- ANAME=$1
- NEWAPP=$(which "${1,,}")
- if [ -z $NEWAPP ]; then
- Alert "Command not found!\nMake sure it's installed." "w"
- return
- fi
+ ANAME="$1"
+ NEWAPP="/usr/bin/${1,,}"
 fi
 
 while [ $CNT -lt ${#FARRAY[@]} ]; do
@@ -289,11 +291,10 @@ fi
 }
 
 SavePFile() {
- sudo false
-  echo -e "$PFILE" >"$POLSAVE"
+ sudo echo -e "$PFILE" >"$POLSAVE"
   Changes "-1"
   sleep 0.1
-  Alert "pkexec policy file saved." "w"
+  Alert "pkexec policy file saved."
 }
 
 ReadFile() {
@@ -310,7 +311,7 @@ PFILE="<?xml version="1.0" encoding=\"UTF-8\"?>
 
 </policyconfig>
  "
- Alert "Just a Note..\n\na current pkexec policy file did not exist\nso a new one will be created upon saving." "w"
+ Alert "Just a Note..\n\na current pkexec policy file did not exist\nso a new one will be created upon saving."
 fi
 }
 
@@ -384,6 +385,7 @@ fi
 # through it reads it to $Pipetext and runs the DoCommand() procedure above.
 # Closing the GUI deletes the pipe file so our loop runs while the file exists.
 
+# IMPORTANT, set the generic text splitting variable (IFS) to newline so white spaces won't count.
 IFS=$'\n'
 
 KillFiles
