@@ -87,8 +87,8 @@ flags can be showhidden or multi , the dialog will message back the result to th
 Eg.
 dialog=title|Select folder to open...
 dialog=opendir|/home/|showhidden
-read -u 3 NEWAPP
-if [ -z "$NEWAPP" ]; then
+read -u 3 NEWDIR
+if [ -z "$NEWDIR" ]; then
 echo "Change path Cancelled.."
 fi
 
