@@ -6,10 +6,10 @@
 
 # Run Gform.gambas with some args.
 ./GForm pipe="/tmp/fifo1" \
-box button="btn|Button 1" button="btn|Button 2" tbutton="tbtn|Toggle button" unbox \
+box button="btn|Button 1" button="btn|Button 2" tgbutton="tbtn|Toggle button" unbox \
 box label="lab1|Enter Text String & hit enter" input="inp1|Textbox here" unbox \
 checkbox="c1|Got a check box too|on" \
-box button="OK|Okay|close" button="BQ|Quit Button|quit"&sleep 1
+box button="OK|Okay|close" button="BQ|Quit Button|quit"&false #sleep 1
 
 
 CleanUp() {
@@ -84,12 +84,7 @@ fi
 # through it reads it to #Pipetext and runs the DoCommand() procedure above.
 # Closing the GUI deletes the pipe file so our loop runs while the file exists
 
-if [ ! -e "/tmp/fifo1" ]; then
- Alert "Unable to locate pipe from GForm!"  # pipe wasnt found so something went wrong
- exit
-fi
-
-exec 3</tmp/fifo1 
+exec 3<>/tmp/fifo1 
   while [ -e "/tmp/fifo1" ]; do
   read -u 3 PipeText
    if [ ! -z "$PipeText" ]; then  # We got some text so process it.

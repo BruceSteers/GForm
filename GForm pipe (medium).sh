@@ -27,7 +27,7 @@ checkbox="c1|Got a check box too|on" \
 listbox="lb1|$NameList|0|stretch" \
 box label="|GUI font" fontbox="fnt1||stretch" unbox \
 box spring button="BQ|Quit Button|close"&sleep 1
-
+AppOpen=1
 
 CleanUp() {
 exec 3<&- 2>/dev/null # close the pipe handle
@@ -50,19 +50,15 @@ NameList=${txt#,*}
 Alert() {  
 # just using GForm to pop up a message box. 
 # it uses the running GUI's internal "message" function
-if [ "$2" = "w" ]; then
-Send "disable"
-Send "message=$1"
-Send "enable"
-sleep 0.3 # give the GUI a moment to become enabled again
-else
-Send "message=$1" 2>/dev/null
+if [ $AppOpen -eq 0 ]; then
+gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close" 2>/dev/null
+return
 fi
+Send "message=$1"
 }
 
 Send() {
-echo -e "$1\n" >/tmp/fifo2
-sleep 0.03
+echo -e "$1\n" >>/tmp/fifo2
 }
 
 TextToData() {
@@ -81,34 +77,23 @@ else
 fi
 }
 
-CheckAnotherCom() {
-Send "check"
-read -u 3 PText
-if [ $PText != "check" ]; then
- TextToData "$PText"
- DoCommand "$PText"
- TextToData "$PipeText"
-fi
-}
 
 DoCommand() {  
 # this is the main function for processing the data coming from the GUI.
 # The message will be in the form of "object_name|object_text|object_value"
-if [ "$1" = "check" ]; then return; fi
 
 if [ "$ACTIVE" = "no" ]; then  # set ACTIVE to "no" to disable this routine
 return
 fi
 
-
 if [ "$CName" = "btnAdd" ]; then 
 ListIndex="${#NameArray[@]}"
 if [ "$NameList" = "" ]; then 
-Send "enable=btnDel"; sleep 0.1; fi
+Send "enable=btnDel"; fi
 
 NameArray+=( "New Name" )
 ArrayToList
-Send "setlist=lb1|$NameList\nsetindex=lb1|$ListIndex"
+Send "setlist=lb1|$NameList\nsetindex=lb1|$ListIndex|nolock"
 
 elif [ "$CName" = "btnDel" ]; then 
 if [ ${#NameArray[@]} -eq 1 ]; then
@@ -118,15 +103,12 @@ NameArray=( "${NameArray[@]:0:$((ListIndex))}" "${NameArray[@]:$ListIndex+1}" )
 ArrayToList
 fi
 
-if [ "$[ListIndex+1]" -eq ${#NameArray[@]} ]; then ((ListIndex--)); fi
+if [ "$[ListIndex]" -eq ${#NameArray[@]} ]; then ((ListIndex--)); fi
 
-Send "setlist=lb1|$NameList"
-Send "setindex=lb1|$ListIndex"
+Send "setlist=lb1|$NameList\nsetindex=lb1|$ListIndex|nolock"
  
 if [ "$NameList" = "" ]; then 
-sleep 0.2
-Send "disable=btnDel"
-Send "settext=inp1|"
+Send "disable=btnDel\nsettext=inp1|"
 fi
 
 elif [ "$CName" = "c1" ]; then
@@ -136,21 +118,20 @@ elif [ "$CName" = "inp1" ]; then
 NameArray[$ListIndex]="$CText"
 TMP=$ListIndex
 ArrayToList
-Send "setlist=lb1|$NameList\nsetindex=lb1|$TMP"
+Send "setlistitem=lb1|$CText"
 
 elif [ "$CName" = "fnt1" ]; then
 Send "mainfont=$CText"
 
 elif [ "$CName" = "lb1" ]; then
-TIndex=$CData
-CheckAnotherCom
-ListIndex=$TIndex
+ListIndex=$CData
  Send "settext=inp1|$CText"
 
 
 elif [ "$CName" = "BQ" ]; then
+AppOpen=0
  Alert "You've Exited." "w"
- CleanUp
+ CleanUp 
 else
 Alert "unknown message\n$1" "w"
 fi
@@ -162,6 +143,7 @@ fi
 # This is the main loop, It opens the pipe and if a line of text comes
 # through it reads it to $Pipetext and runs the DoCommand() procedure above.
 # Closing the GUI deletes the pipe file so our loop runs while the file exists.
+
 IFS=$'\n'
 exec 3</tmp/fifo1 
   while [ -e "/tmp/fifo1" ]; do

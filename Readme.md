@@ -17,7 +17,7 @@ It currently lack lots of features but is still useable.
 It creates a form/window and currently only adds objects to it vertically.
 you can create a HBox and add objects to that horizontally.
 currently supported objects are...
-Button, ToggleButton, TextBox (InputBox), CheckBox, ListBox, 
+Button, ToggleButton, ToolButton, TextBox (InputBox), CheckBox, ListBox, 
 DirBox, FontBox, ComboBox, Label, HBox, Spring
 <pre>
 Arguments are....
@@ -41,6 +41,8 @@ fontbox="name|FontName|flags"
 dirbox="name|path|flags" , makes a dirbox derectory chooser
 combobox="name|comma,seperated,list|index|flags" , makes a read-only combobox, index is selected number
 listbox="name|comma,seperated,list|index|flags" , makes a list box, index is selected number
+gridview="name|comma,seperated,COLUMN list|flags" , makes a list with rows and columns, Set column headers
+griditems="gridview_name|comma,seperated,list1|comma,sep,list2..|index" , add items to named GridView
 label="name|text" , makes a label.
 
 For all above objects, 'flags' can be..
@@ -62,7 +64,8 @@ quiet , suppresses any stdout messages (not pipe messages)
 
 (Arguments sent to GForm via listening pipe)
 settext=object_name=text , sets text field of named object
-setindex=object_name=number , selects the numbered item in either a listbox or combobox
+setindex=object_name=number|nolock , selects the numbered item in either a listbox or combobox or gridview
+  use 'nolock' if you want to trigger the list selection event as if you clicked it.
 setlist=object_name=comma,seperated,list  , changes the whole item list in either listbox or combobox
 setlistitem=object_name=text=number  , changes a single numbered item text in either listbox or combobox
 hide=object_name , hides named object, use 'hide' alone to hide main wiindow
@@ -87,10 +90,20 @@ flags can be showhidden or multi , the dialog will message back the result to th
 Eg.
 dialog=title|Select folder to open...
 dialog=opendir|/home/|showhidden
-read -u 3 NEWDIR
-if [ -z "$NEWDIR" ]; then
+read -u 3 NEWAPP
+if [ -z "$NEWAPP" ]; then
 echo "Change path Cancelled.."
 fi
+
+gridview=gridview_name|command|args, commands for gridview as follows...
+add|comma,seperated,list|index , adds an item at index or to list end if no index supplied
+del|index , delete row at index or selected row if omitted
+clear , Clears list items but not the columns
+getrow|index , returns comma seperated list or all items in selected row or at index
+setrow|comma,sep,list|index , sets whole row to list at index or selected
+gettext|row,column , get a single cell text from numbered cell
+settext|row,column , Sets a single cell text at numbered cell
+getall , gets ALL list items, each row is seperated by '|', each column by ','
 
 message="Message text" , pops open a message window
 stop or start , pauses the gui sending your script messages while you alter objects.

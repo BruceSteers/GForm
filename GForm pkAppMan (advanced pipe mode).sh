@@ -21,7 +21,7 @@ OpenForm() {
 ./GForm quiet font="Carlito,14,Italic" pipe="/tmp/fifo1" listen="/tmp/fifo2" title="pkexec policy manager using GForm (full example)" \
 label="|Rule List,, Add, Edit or remove items" \
 listbox="lb1|$AppList||stretch" \
-box label="|Descrip[tion" input="desc||disabled" unbox \
+box label="|Description" input="desc||disabled" unbox \
 box label="|Message" input="mess||disabled" unbox \
 box label="|Path" input="path||disabled readonly right" button="freq|@|disabled nostretch" unbox \
 box button="add|Add New" button="del|Delete|disabled" combobox="presets|Select a Preset,Pluma,Gambas3,Xed|0" unbox \
@@ -81,7 +81,7 @@ fi
 
 Send() {
 echo -e "$1\n" >/tmp/fifo2
-sleep 0.03
+#sleep 0.02
 }
 
 TextToData() {
@@ -133,7 +133,6 @@ elif [ "$CName" = "lb1" ]; then
 if [ $ListIndex -eq -1 ]; then
  Send "enlist=del|desc|mess|path|freq"
 fi
-CheckAnotherCom
  ListIndex=$CData
  ANAME=$CText
  GetFields
@@ -152,7 +151,6 @@ Changes
 elif [ "$CName" = "freq" ]; then
 Send "dialog=title|Select app to use"
 Send "dialog=openfile|/usr/bin/NewApp|showhidden"
-sleep 0.1
 read -u 3 NEWAPP
 if [ -z "$NEWAPP" ]; then
 Alert "Change path Cancelled.."
@@ -167,11 +165,7 @@ elif [ "$CName" = "rel" ]; then
 ReadFile
 ReadApps
 ListIndex=-1
-Send "setlist=lb1|$AppList"
-Send "settext=desc|"
-Send "settext=mess|"
-Send "settext=path|"
-Send "dislist=del|desc|mess|path|freq"
+Send "setlist=lb1|$AppList\nsettext=desc|\nsettext=mess|\nsettext=path|\ndislist=del|desc|mess|path|freq"
 Changes "-1"
 elif [ "$CName" = "save" ]; then
 SavePFile
@@ -241,17 +235,15 @@ fi
 
 ReadApps
 ListIndex=$[RULECOUNT-1]
-Send "setlist=lb1|$AppList"
-Send "setindex=lb1|$ListIndex"
+Send "setlist=lb1|$AppList\nsetindex=lb1|$ListIndex|nolock"
 
 }
 
 
 DeleteField() {
-CNT=0 ; MODE=0; FND=0; NTXT=""; RC=$RULECOUNT
-((RC--))
+CNT=0 ; MODE=0; FND=0; NTXT="";
 
-if [ "$ListIndex" -eq "$RC" ]; then ((ListIndex--)); fi
+if [ "$ListIndex" -eq "$[RULECOUNT-1]" ]; then ((ListIndex--)); fi
 while [ $CNT -lt ${#FARRAY[@]} ]; do
 TXT="${FARRAY[$CNT]}"
 if [ $MODE -eq 0 ]; then
@@ -285,13 +277,13 @@ if [ "$AppList" = "" ]; then
 Send "dislist=del|desc|mess|path|freq"
 
 else
-Send "setindex=lb1|$ListIndex"
+Send "setindex=lb1|$ListIndex|nolock"
 fi
  fi
 }
 
 SavePFile() {
- sudo echo -e "$PFILE" >"$POLSAVE"
+ echo -e "$PFILE" >"$POLSAVE"
   Changes "-1"
   sleep 0.1
   Alert "pkexec policy file saved."
@@ -333,16 +325,11 @@ TXT="${FARRAY[$CNT]}"
 
  if [[ "$TXT" = *"<action id="* ]]; then
   ((RULECOUNT++))
- APP=${TXT#*exec.run-} ; APP=${APP%\"*}
-#"
+ APP=${TXT#*exec.run-} ; APP=${APP%\"*}    #"}
   if [ ! -z "$AppList" ]; then
-  AppList="$AppList,$APP"
+   AppList="$AppList,$APP"
   else
-   if [ "$SMODE" = "LST" ]; then
-   echo "$APP"
-   else
    AppList="$APP"
-   fi
   fi
  fi
 ((CNT++))
@@ -374,9 +361,7 @@ fi
 ((CN++))
 done
 if [ $GOT -eq 1 ]; then
-Send "settext=desc|$DESC"
-Send "settext=mess|$MESS"
-Send "settext=path|$PTH"
+Send "settext=desc|$DESC\nsettext=mess|$MESS\nsettext=path|$PTH"
 fi
 }
 
@@ -387,7 +372,7 @@ fi
 
 # IMPORTANT, set the generic text splitting variable (IFS) to newline so white spaces won't count.
 IFS=$'\n'
-
+sudo false
 KillFiles
 ReadFile
 ReadApps
