@@ -1,0 +1,76 @@
+
+Runtime args when launching GForm
+
+Notes...
+Arguments are proccessed in the order they are written so some need to be issued before others.
+For example using the arg 'allstretch' that will set the default expand option on all controls 
+to true will only be set once it's read in the list , so any arguments to create 
+controls/buttons/etc issued before the allstretch arg will not have their flag set. So it needs
+to be issued before any controls. In the same respect you cannot issue the arg 'griditems' to 
+add items to a gridview before issuing the arg 'gridview' to create the gridview.
+
+version or ver , pops up a version info mesage and exits
+
+-- Main window/Form related options...
+title="Title for window top"
+width=<n> , manually define a window width
+font=font name , Sets the main form font Eg 'Carlito,14,Italic'
+noresize , makes form non resizable
+stretchall or allstretch , sets all objects to expand. (except any with the nostretch flag set)
+topmost or toponly , forces window to stay above others.
+seperator=text or sep=text , default arg seperator is '|' change it here if needed
+listseperator=text or lsep=text , default list seperator is ',' change it here if needed
+
+-- Object placement , By default each object is placed vertically in the GUI from top
+-- to bottom. To place a row of objects Horizontally use the 'box' option
+box , makes a Horizontal box, subsequent objects go in the box horizontally until unboxed
+unbox , finishes the box
+
+-- Controls...
+button="name|text|flags" , makes a button (close makes button close the window)
+toolbutton="name|text|flags" , makes a Toolbar style Button (close makes button close the window)
+togglebutton="name|text|flags" , makes a ToggleButton, use 'on' to make it active
+input="name|text|flags" , makes a TextBox for inputting text (also textbox does the same)
+checkbox="name|text|flags" , makes a CheckBox , use 'on' for ticked
+fontbox="name|FontName|flags" , makes a font choosing box
+dirbox="name|path|flags" , makes a dirbox directory chooser
+combobox="name|comma,seperated,list|index|flags" , makes a read-only combobox, index is selected number
+listbox="name|comma,seperated,list|index|flags" , makes a list box, index is selected number
+gridview="name|columns,comma,seperated|flags" , makes a grid list with rows and columns
+griditems=gridview_name|row,1|row,2|etc|index , add one or more rows to the named gridview
+label="name|text" , makes a label.
+
+For all above objects the following 'flags' can be given as the last argument seperated by spaces. 
+Eg, to create a text box that auto expands and is disabled use..
+textbox=tname|My Text|stretch disabled
+'on' for toggle button or checkbox state on load, 
+'disabled' disables object, 
+'hidden' hides the object, 
+'stretch' or 'nostretch' forces object resizing or not
+'readonly' for input box (or any other control that supports it)
+'left' 'right' or 'center' for text alignment.
+'noheader' , use with gridview to not show the column headers.
+'close' or 'quit' makes button close GUI after pressed , 
+
+spring , adds a spring, place to push objects, eg. "box spring button unbox" will push button to the right.
+
+pipe="path/to/pipe" , name of the outgoing pipe file (Eg. /tmp/fifo1) GForms way of talking to your script
+listen="path/to/pipe", name of listening pipe file (Eg. /tmp/fifo2) your scripts way to control GForm 
+
+quiet , suppresses any stdout messages (not pipe messages)
+
+return=<mode> ; set behaviour if not using the pipe feature, can be 'name', 'text', 'all' or 'collect'  or...
+returnname or returnval, same as return=name , for use in button only requesters where one answer is expected
+for example in a "Yes | No | Cancel" type of scenario, you would ideally name the buttons 0, 1 and 2 for ease.
+return=name returns the 1st part, the name only of the button pressed.
+returntext , same as return=text , like return=name but returns the 2nd part, only the Text of the button
+return or returnall , same as return=all , rerturns both object name and text. eg. btn1|button 1
+
+collect , same as return=collect , this supresses any messages during use but when the GUI is closed
+all the objects names and fields are collected and returned to your script for proccessing.
+(warning , collect mode is not impplemented yet)
+
+Tips....
+If object placement/sizing is being somewhat unexpected use the allstretch stretch and nostretch 
+combinations and add springs to get better results.
+
