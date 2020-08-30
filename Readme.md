@@ -36,7 +36,8 @@ box , makes a Horizontal box, subsequent objects go in the box horizontally unti
 unbox , finishes the box
 
 button="name|text|flags" , makes a button (close makes button close the window)
-tbutton="name|text|flags" , makes a ToggleButton, use 'on' to make it down
+tgbutton="name|text|flags" , makes a ToggleButton, use 'on' to make it down
+toolbutton"name|text|flags" , makes a flat toolbar style button
 input="name|text|flags" , makes a TextBox 
 checkbox="name|text|flags" , makes a CheckBox , use 'on' for ticked
 fontbox="name|FontName|flags"

@@ -25,7 +25,10 @@ box label="|Description" input="desc||disabled" unbox \
 box label="|Message" input="mess||disabled" unbox \
 box label="|Path" input="path||disabled readonly right" button="freq|@|disabled nostretch" unbox \
 box button="add|Add New" button="del|Delete|disabled" combobox="presets|Select a Preset,Pluma,Gambas3,Xed|0" unbox \
-box button="save|Save Changes|disabled" button="rel|Reload (Revert)|disabled" spring button="BQ|Quit|close"&sleep 1
+box button="save|Save Changes|disabled" button="rel|Reload (Revert)|disabled" spring button="BQ|Quit|close"&false
+  while [ ! -e "/tmp/fifo1" ]; do
+  sleep 0.1
+  done
 AppOpen=1
 }
 
@@ -80,8 +83,7 @@ fi
 }
 
 Send() {
-echo -e "$1\n" >/tmp/fifo2
-#sleep 0.02
+echo -e "$1" >>/tmp/fifo2
 }
 
 TextToData() {
@@ -97,16 +99,6 @@ if [[ "$TMP" = *"|"* ]]; then
 else
  CText="$TMP"
  CData=""
-fi
-}
-
-CheckAnotherCom() {
-Send "check"
-read -u 3 PText
-if [ $PText != "check" ]; then
- TextToData $PText
- DoCommand $PText
- TextToData $PipeText
 fi
 }
 
@@ -158,6 +150,7 @@ return
 fi
 PTH=$NEWAPP
 FARRAY[$PPOS]="    <annotate key="org.freedesktop.policykit.exec.path">$PTH</annotate>"
+Send "settext=path|$PTH"
 WriteApps
 Changes
 
@@ -191,7 +184,6 @@ CNT=0 ; SKIP=0; NTXT=""
 if [ -z $1 ]; then
  Send "dialog=title|Select app to add to pkexec list"
  Send "dialog=openfile|/usr/bin/NewApp|showhidden"
- sleep 0.1
  read -u 3 NEWAPP
   if [ -z "$NEWAPP" ]; then
    Alert "Adding Cancelled.."

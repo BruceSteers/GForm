@@ -26,7 +26,10 @@ box label="|Modify name" input="inp1|Fred" unbox \
 checkbox="c1|Got a check box too|on" \
 listbox="lb1|$NameList|0|stretch" \
 box label="|GUI font" fontbox="fnt1||stretch" unbox \
-box spring button="BQ|Quit Button|close"&sleep 1
+box spring button="BQ|Quit Button|close"&false
+ while [ ! -e "/tmp/fifo1" ]; do
+ sleep 0.1
+ done
 AppOpen=1
 
 CleanUp() {
@@ -145,6 +148,7 @@ fi
 # Closing the GUI deletes the pipe file so our loop runs while the file exists.
 
 IFS=$'\n'
+
 exec 3</tmp/fifo1 
   while [ -e "/tmp/fifo1" ]; do
   read -u 3 PipeText
