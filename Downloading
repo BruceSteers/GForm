@@ -6,5 +6,8 @@ The gambas3 runtime installed
 sudo apt-get install -y gambas3-runtime
 
 Download the example scripts to see usage like how to use the pipes for comunuication between the GUI and the script.
+Download the text help files for instructions.
+
+Download the GForm_source.zip for all files including examples, help, GForm executable, source code
 
 Happy scripting :)
