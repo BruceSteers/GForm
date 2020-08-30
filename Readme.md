@@ -12,16 +12,18 @@ monitor/react to the actions in the script using a pipe.
 The goal is to be able to make functional GUI apps just with shell
 scripting in bash.
 
-It currently lack lots of features but is still useable.
-
 It creates a form/window and currently only adds objects to it vertically.
 you can create a HBox and add objects to that horizontally.
 currently supported objects are...
 Button, ToggleButton, ToolButton, TextBox (InputBox), CheckBox, ListBox, 
 DirBox, FontBox, ComboBox, Label, HBox, Spring
+
+
+
 <pre>
 Arguments are....
 (Runtime args when launching GForm)
+vesrion or ver , displays version number and exits.
 
 title="Title for window top"
 width=<n> , manually define a window width

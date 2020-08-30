@@ -1,0 +1,33 @@
+GForm Version History
+
+V1.3.0
+found a bug in the listening pipe routine where multiple lines of text were not being processed correctly.
+and also a bug in the scripts using only one > to send text to the pipe thus overwriting unread messages.
+both bugs fixed. this has solved a few odd bugs i was getting and made everything even more responsive.
+
+Added gridview object and many commands for it
+Made a GridView version of pkAppMan
+
+V1.2.0
+Stopped pipe reading being on a timer event and made it live with a File_Read event trigger, This made
+a big difference in speed.
+added more controls/commands
+now it can work like zenity --question where you configure a text and as many buttons as you like
+and when button is pressed it closes and returns the button info to stdout.
+
+V1.1.1
+Added some more controls and lots of commands
+Added flags to enable,hide objects etc
+added message for internal message box
+noresize to stop window resize
+fontbox and font commands
+added dialog commands
+
+V1.1.0
+added listening pipe to send commands to GUI from the script.
+added spring , manual width setting
+added an example script to show listening pipe in action
+
+V1.0
+Initial build, not many controls, only an output pipe but funcional.
+1 example script included
