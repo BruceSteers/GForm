@@ -1,5 +1,15 @@
 GForm Version History
 
+V1.4.0
+Added stock icons.
+run 'GForm geticons' to show all available stock icons and get their names, clicking an icon
+ copies it's name to the clipboard. in the object flags simply add 'icon=name'
+Added background/foreground colour flags , use R,G,B Eg, background=256,256,256 for white
+Added TextArea , settext command works and also has a filetext=object_name|filename to 
+  load a file directly or addline=Object_name|text to add lines.
+added lines=number flag for textarea,listbox and gridview to set height.
+Added inputbox=title|prompt|text for a pop up input box (returns output to pipe or shell)
+
 V1.3.0
 found a bug in the listening pipe routine where multiple lines of text were not being processed correctly.
 and also a bug in the scripts using only one > to send text to the pipe thus overwriting unread messages.

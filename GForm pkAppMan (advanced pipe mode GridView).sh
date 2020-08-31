@@ -23,9 +23,9 @@ label="|Rule List,, Add, Edit or remove items" \
 gridview="gv1|Name,Description,Message,Path|stretch" \
 box label="|Description" input="desc||disabled" unbox \
 box label="|Message" input="mess||disabled" unbox \
-box label="|Path" input="path||disabled readonly right" button="freq|@|disabled nostretch" unbox \
-box button="add|Add New" button="del|Delete|disabled" combobox="presets|Select a Preset,Pluma,Gambas3,Xed|0" unbox \
-box button="save|Save Changes|disabled" button="rel|Reload (Revert)|disabled" spring button="BQ|Quit|close"&false
+box label="|Path" input="path||disabled readonly right" button="freq||disabled nostretch icon=open" unbox \
+box button="add|Add New|icon=add" button="del|Delete|disabled icon=remove" combobox="presets|Select a Preset,Pluma,Gambas3,Xed|0" unbox \
+box button="save|Save Changes|disabled icon=save" button="rel|Reload (Revert)|disabled icon=refresh" spring button="BQ|Quit|close icon=quit"&false
 }
 
 CleanUp() {
@@ -59,7 +59,7 @@ Alert() {
 # just using GForm to pop up a message box. if the GUi is not open it runs a seperate 
 # GForm instance or it uses the running GUI's internal "message" function
 if [ $AppOpen -eq 0 ]; then
-gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close" 2>/dev/null
+gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close icon=ok" 2>/dev/null
 return
 fi
 Send "message=$1"
@@ -81,9 +81,6 @@ fi
 Send() {
 echo -e "$1" >>/tmp/fifo2
 #sleep 0.05
-}
-SendQ() {
-echo -e "$1" >>/tmp/fifo2
 }
 AskGUI() {
 echo -e "$1" >>/tmp/fifo2
@@ -117,12 +114,10 @@ if [ "$ACTIVE" = "no" ]; then return; fi
 # so we can add our procedures here according to the GUI data.
 
 if [ "$CName" = "add" ]; then 
-#echo "Adding..."
 AddField
 
 elif [ "$CName" = "del" ]; then 
 DeleteField
-
 
 elif [ "$CName" = "gv1" ]; then
 if [ $ListIndex -eq -1 ]; then
@@ -210,9 +205,6 @@ if [ $RULECOUNT -eq 0 ]; then
 Send "settext=desc|\nsettext=mess|\nsettext=path|\ndislist=del|desc|mess|path|freq"
 else
 Send "setindex=gv1|$ListIndex|nolock"
-#AskGUI "gridview=gv1|getrow"
-#CText="gv1|nop|$REPLY"
-#GetFields
 fi
 }
 
@@ -340,7 +332,6 @@ exec 3</tmp/fifo1
 
   while [ -e "/tmp/fifo1" ]; do
   read -u 3 PipeText
-
    if [ ! -z "$PipeText" ]; then  # We got some text so process it.
     TextToData $PipeText
     DoCommand $PipeText

@@ -23,14 +23,15 @@ fi
 if [ -e "/tmp/fifo1" ]; then
 rm /tmp/fifo1
 fi
+ Alert "You've Exited. Quitting..." "w"
 exit
 }
 
 Alert() {  # Example using Gform to pop up a message
 if [ "$2" = "w" ]; then
-gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close" 2>/dev/null
+gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close icon=ok" 2>/dev/null
 else
-gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close" 2>/dev/null&false
+gbr3 GForm quiet toponly title="Notice.." label="|$1" button="|Okay|close icon=ok" 2>/dev/null&false
 fi
 }
 
@@ -67,7 +68,7 @@ elif [ "$CName" = "c1" ]; then
  Alert "The Checkbox $CName it's now '$CData'"
 
 elif [ "$CName" = "inp1" ]; then
- Alert "The textbox inp1 changed to '$CText'"
+ echo "The textbox inp1 changed to '$CText'"
 
 # note, alert for quit buttons adds the "w" (wait) option otherwise
 # the calling shell can terminate and close the mesaage prematurely
@@ -75,7 +76,6 @@ elif [ "$CName" = "OK" ]; then
  Alert "You've closed GUI but okay pressed.\nHere your script could continue" "w"
  CleanUp
 elif [ "$CName" = "BQ" ]; then
- Alert "You've Exited. Quitting..." "w"
  CleanUp
 fi
 

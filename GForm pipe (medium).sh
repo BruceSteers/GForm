@@ -12,7 +12,9 @@ rm /tmp/fifo1
 fi
 
 # Set up our name list and run Gform.gambas with some args.
+IFS=$'\n'
 NameArray=(Fred Freda "Uncle Bob" Sally)
+
 for s in "${NameArray[@]}"; do txt="$txt,$s"; done
 NameList=${txt#,*} ; ListIndex=0
 
@@ -21,12 +23,12 @@ NameList=${txt#,*} ; ListIndex=0
 # suppress any stdout message unlike the 'Test_GForm (simple).sh' example.
 
 ./GForm quiet font="Carlito,14,Italic" pipe="/tmp/fifo1" listen="/tmp/fifo2" title="GForm medium advanced shell script example" width=350 \
-box button="btnAdd|Add Name" button="btnDel|Del Name" spring unbox \
+box button="btnAdd|Add Name|icon=add" button="btnDel|Del Name|icon=delete" spring unbox \
 box label="|Modify name" input="inp1|Fred" unbox \
 checkbox="c1|Got a check box too|on" \
 listbox="lb1|$NameList|0|stretch" \
 box label="|GUI font" fontbox="fnt1||stretch" unbox \
-box spring button="BQ|Quit Button|close"&false
+box spring button="BQ|Quit Button|close icon=quit"&false
  while [ ! -e "/tmp/fifo1" ]; do
  sleep 0.1
  done
@@ -147,7 +149,6 @@ fi
 # through it reads it to $Pipetext and runs the DoCommand() procedure above.
 # Closing the GUI deletes the pipe file so our loop runs while the file exists.
 
-IFS=$'\n'
 
 exec 3</tmp/fifo1 
   while [ -e "/tmp/fifo1" ]; do

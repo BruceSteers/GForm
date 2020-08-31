@@ -23,9 +23,9 @@ label="|Rule List,, Add, Edit or remove items" \
 listbox="lb1|$AppList||stretch" \
 box label="|Description" input="desc||disabled" unbox \
 box label="|Message" input="mess||disabled" unbox \
-box label="|Path" input="path||disabled readonly right" button="freq|@|disabled nostretch" unbox \
+box label="|Path" input="path||disabled readonly right" button="freq||disabled nostretch icon=open" unbox \
 box button="add|Add New" button="del|Delete|disabled" combobox="presets|Select a Preset,Pluma,Gambas3,Xed|0" unbox \
-box button="save|Save Changes|disabled" button="rel|Reload (Revert)|disabled" spring button="BQ|Quit|close"&false
+box button="save|Save Changes|disabled" button="rel|Reload (Revert)|disabled" spring button="BQ|Quit|close icon=quit"&false
   while [ ! -e "/tmp/fifo1" ]; do
   sleep 0.1
   done
