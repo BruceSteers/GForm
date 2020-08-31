@@ -9,7 +9,15 @@ if [ -e "/tmp/fifo1" ]; then rm /tmp/fifo1; fi
 
 # Set up our list using dir to get contents of help dir and run Gform.gambas with some args.
 IFS=$'\n'
-FILES=$(dir -1N "./help")
+HDIR="./help"
+if [ ! -e "$HDIR/2 Runtime args.txt" ]; then
+ HDIR="."
+ if [ ! -e "$HDIR/2 Runtime args.txt" ]; then
+  gbr3 GForm quiet toponly title="Notice.." label="|Help Files were not found|\nPlease download them from the GForm github" button="|Okay|close icon=ok" 2>/dev/null
+  exit
+ fi
+fi
+FILES=$(dir -1N "$HDIR/")
 read -d '{' -a NameArray <<< "$FILES{"
 for s in "${NameArray[@]}"; do txt="$txt,$s"; done
 NameList=${txt#,*}
@@ -18,10 +26,10 @@ NameList=${txt#,*}
 # as each line is each row in the form. note, using option 'quiet' to
 # suppress any stdout message unlike the 'Test_GForm (simple).sh' example.
 
-./GForm quiet font="Carlito,14,Italic" width=800 pipe="/tmp/fifo1" listen="/tmp/fifo2" title="GForm medium advanced shell script example" \
+./GForm quiet font="Carlito,14,Italic" width=scr-200 pipe="/tmp/fifo1" listen="/tmp/fifo2" title="GForm medium advanced shell script example" \
 box label="|Current File" input="inp1||readonly left" unbox \
-listbox="lb1|$NameList||nostretch lines=5 background=200,220,220" \
-textarea="ta1|Help will be here\nJust select a topic..|stretch readonly lines=10" \
+listbox="lb1|$NameList||nostretch lines=6 background=200,220,220" \
+textarea="ta1|Help will be here\nJust select a topic..|stretch readonly lines=10 background=210,220,210" \
 box label="|Change font" fontbox="fnt1||stretch" fbutton="lft||icon=text-left" fbutton="ctr||icon=text-center" fbutton="rgt||icon=text-right" spring button="BQ|Quit|close icon=quit"&false
 
  while [ ! -e "/tmp/fifo1" ]; do
