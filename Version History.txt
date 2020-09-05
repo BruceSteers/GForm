@@ -1,5 +1,25 @@
 GForm Version History
 
+V1.5.0
+Added menus , now you can use menu=Name|Parent|Text|Flags to add a menu item, complete menus 
+can be built using parenting. Also popup menus can be assigned to objects in the objects flags.
+The way the pipe was being opened/read was causing a bug in the popup menus so I've corrected for this now.
+Wrote instructions/help file on how to make menus and added an example script.
+
+V1.4.2
+Have incorporated the help texts into the program.
+running with no args pops up some info and options to show help
+There are 2 help modes 'GForm command help' and 'GForm fullhelp'
+Both helps pop open a window , command help lists the file contents of the
+runtime commands and GUI pipe commands files into a single textview.
+fullhelp lets you select any of all the help text files.
+bugfixes , 
+found an issue with some single word commands not being recognised.
+Added more info the the error message produced when the pipe commands are not right 
+to help you see whats going wrong, it used to just say there was an error in 
+DoMessage() now it gives the offending message.
+Have done more testing, minor sanity checks and error handling.
+
 V1.4.1
 Found an issue with Gambas compiling the exe.
 i did not know that Gambas puts the entire project folder into the compiled executable.

@@ -1,9 +1,23 @@
 
-GForm V1.4.1
+GForm V1.5.0
 
 (was thinking of calling it Genity)
 
 zenity like form maker using a pipe for shell interaction
+Minimum Requirements... 
+If you have installed the Gambas3 package you should have all that's needed.
+for the complete Gambas3 developement environment type in a terminal..
+sudo apt-get install -y gambas3
+
+Otherwise the minimum requirements for GForm are the following packages...
+gambas3-runtime 
+gambas3-gb-image 
+gambas3-gb-gui 
+gambas3-gb-form 
+gambas3-gb-form-stock
+
+sudo apt-get install -y gambas3-runtime gambas3-gb-image gambas3-gb-gui gambas3-gb-form gambas3-gb-form-stock
+
 
 Work in progress.
 
@@ -18,7 +32,7 @@ It creates a form/window and currently only adds objects to it vertically.
 you can create a HBox and add objects to that horizontally.
 currently supported objects are...
 Button, ToggleButton, ToolButton, TextBox (InputBox), TextArea, MaskBox (passwords), CheckBox, ListBox, 
-GridView, DirBox, FontBox, ComboBox, Label, HBox, Spring
+GridView, DirBox, FontBox, ComboBox, Label, HBox, Spring, Menu
 
 
 Provided is a few demo bash scripts and some 
@@ -29,7 +43,7 @@ this simply loads each help file into a TextArea object for your viewing.
 Mostly the GForm program is run from within the scripts with a few args to make a GUI.
 The pipe=/tmp/fifo1 argument makes the app create a pipe that the script then opens and
 waits for messages from the GUI and the listen=/tmp/fifo2 argument makes a pipe for the 
-script able to control the GUI. (There's a help file on pipe basics)
+script to be able to control the GUI. (There's a help file on pipe basics)
 Messages come in the form of name|text or name|text|value depending on the calling object
 
 There are various examples. Simple, Medium and advanced.
