@@ -67,6 +67,7 @@ This is currently beta , some features might not work and you may find some bugs
 SEE THE EXAMPLE SCRIPTS AND HELP TEXTS FOR INFO ON HOW TO MAKE YOUR OWN SHELL GUI APP.
 <p>
   <a href="http://bws.org.uk/gform/examples.html">Here's a selection of snapshots and the arguments that created them</a>
+</p>
 Happy Scripting :)
 Bruce
 
