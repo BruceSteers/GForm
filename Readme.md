@@ -1,5 +1,5 @@
 
-GForm V1.5.0
+GForm V1.5.5
 
 (was thinking of calling it Genity)
 
