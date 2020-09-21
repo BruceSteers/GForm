@@ -1,10 +1,23 @@
 GForm Version History
 
+V1.5.2
+Opps, bugfix , i'de commented out the bit where a button send a message fgor testing and forgot to 
+uncomment it again so buttons were not reacting. fixed.
+
+V1.5.1
+Some minor edits/aditions to help texts.
+Now compiled on the latest stable gambas 3.15 , backward compatibility is enabled for it to work on
+any gambas version above 3.8 though.
+
 V1.5.0
 Added menus , now you can use menu=Name|Parent|Text|Flags to add a menu item, complete menus 
 can be built using parenting. Also popup menus can be assigned to objects in the objects flags.
 The way the pipe was being opened/read was causing a bug in the popup menus so I've corrected for this now.
 Wrote instructions/help file on how to make menus and added an example script.
+
+Added fontbox linkto=name flag, use linkto=name to make a fontbox automatically be attached 
+to any named object, if user changes the font the object font will auto change without any coding.
+
 
 V1.4.2
 Have incorporated the help texts into the program.
