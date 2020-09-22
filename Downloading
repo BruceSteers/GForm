@@ -1,15 +1,9 @@
 You will need...
 
-The main executable GForm (on git main page)
+The main package includes the GForm executable, installer scripts and some examples on how to use GForm.
 
-The gambas3 runtime installed
-sudo apt-get install -y gambas3-runtime
-
-Download the example scripts to see usage like how to use the pipes for comunuication between the GUI and the script.
-Download the text help files for instructions.
-
-Or download the complete package
-Download the GForm_dist.zip for the GForm Application, sample scripts,snapshots and help files.
+Download the complete distribution package.
+Download the <a href="https://github.com/BruceSteers/GForm/blob/master/GForm_dist.zip">GForm_dist.zip</a> for the GForm Application, sample scripts,snapshots and help files.
 
 Download the GForm_source.zip for just the gambas basic source code
 
