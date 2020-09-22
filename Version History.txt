@@ -1,9 +1,10 @@
 GForm Version History
 V1.5.3
-Added additional flag parameters shell= (or com=) and tooltip= (or tip=)
+Added additional argument flag parameters shell= (or com=) and tooltip= (or tip=)
 tooltip goes without saying.
 shell= will execute the supplied command on button click so your script doesn't have to.
 (See Flags section of '2 Runtime args.txt' for more info)
+Added pipe arg settip="obj_name|new tooltip for object" to change/set an objects tooltip.
 
 V1.5.2
 Opps, bugfix , i'de commented out the bit where a button send a message fgor testing and forgot to 
