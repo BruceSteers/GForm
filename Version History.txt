@@ -1,13 +1,22 @@
 GForm Version History
+
+V1.5.4
+adding new flag parameters caused a glitch in using "Labels" , Fixed.
+Using GTk was not working well, what with all maner of gadget layout warning messages
+(All internal GTK errors though not my coding) that and dialogs not showing properly 
+i've now changed it to use QT instead.
+QT still puts out unwanted messages but not so much. reccomend using 2>/dev/null at
+the end of any GForm launch to supress stderr messages.
+Eg. GForm showicons 2>/dev/null
+
 V1.5.3
-Added additional argument flag parameters shell= (or com=) and tooltip= (or tip=)
+Added additional flag parameters shell= (or com=) and tooltip= (or tip=)
 tooltip goes without saying.
 shell= will execute the supplied command on button click so your script doesn't have to.
 (See Flags section of '2 Runtime args.txt' for more info)
-Added pipe arg settip="obj_name|new tooltip for object" to change/set an objects tooltip.
 
 V1.5.2
-Opps, bugfix , i'de commented out the bit where a button send a message fgor testing and forgot to 
+Opps, bugfix , i'd commented out the bit where a button send a message for testing and forgot to 
 uncomment it again so buttons were not reacting. fixed.
 
 V1.5.1

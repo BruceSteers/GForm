@@ -1,23 +1,25 @@
 
-GForm V1.5.3
+GForm V1.5.4
 
 (was thinking of calling it Genity)
 
-zenity like form maker using a pipe for shell interaction<br>
+zenity like form maker using a pipe for shell interaction
 Minimum Requirements... 
-
 If you have installed the Gambas3 package you should have all that's needed.
-for the complete Gambas3 developement environment type in a terminal..<br>
+for the complete Gambas3 developement environment type in a terminal..
 sudo apt-get install -y gambas3
 
 Otherwise the minimum requirements for GForm are the following packages...
 gambas3-runtime 
 gambas3-gb-image 
-gambas3-gb-gui 
+gambas3-gb-gui-qt
 gambas3-gb-form 
 gambas3-gb-form-stock
 
-sudo apt-get install -y gambas3-runtime gambas3-gb-image gambas3-gb-gui gambas3-gb-form gambas3-gb-form-stock
+sudo apt-get install -y gambas3-runtime gambas3-gb-image gambas3-gb-gui-qt gambas3-gb-form gambas3-gb-form-stock
+
+
+Work in progress.
 
 
 With this app you can simmply (kind of) create GUI's in a shell script and 
@@ -28,7 +30,7 @@ scripting in bash.
 
 It creates a form/window and currently only adds objects to it vertically.
 you can create a HBox and add objects to that horizontally.
-currently supported objects are...<br>
+currently supported objects are...
 Button, ToggleButton, ToolButton, TextBox (InputBox), TextArea, MaskBox (passwords), CheckBox, ListBox, 
 GridView, DirBox, FontBox, ComboBox, Label, HBox, Spring, Menu
 
@@ -44,7 +46,7 @@ waits for messages from the GUI and the listen=/tmp/fifo2 argument makes a pipe 
 script to be able to control the GUI. (There's a help file on pipe basics)
 Messages come in the form of name|text or name|text|value depending on the calling object
 
-There are various examples. Simple, Medium and advanced.<br>
+There are various examples. Simple, Medium and advanced.
 The simple pipe example greates a GUI and simply listens for events, making the script react in various ways.
 The medium example is more complex in that as well as a pipe being read by the script monitoring 
 messages from the GUI the script is also sending messages back to the GUI to alter objects.
@@ -60,7 +62,6 @@ The advantages with GForm over Zenity being able to use multiple rows of buttons
 There's a snapshot image or 2 in the folder. 
 
 Included is the gambas basic source code
-
 This is currently beta , some features might not work and you may find some bugs.
 
 SEE THE EXAMPLE SCRIPTS AND HELP TEXTS FOR INFO ON HOW TO MAKE YOUR OWN SHELL GUI APP.
