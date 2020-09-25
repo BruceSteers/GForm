@@ -1,5 +1,14 @@
 GForm Version History
 
+V1.5.5
+Pah, well QT gave less layout warning messages but i found it caused the FontBox to lock up the GUI.
+A far worse problen than the gtk one so am now using gb.gui again.
+background and foreground colour settings added to main args list.
+Added 'collect' mode or return=end. This mode does not give out any messages during use but once
+the window is closed returns all the settable fields and their values to the shell at once. Works like
+the other return=mode options in that ANY normal button will auto-close the window. to override this action
+use the noclose or noquit flag.
+
 V1.5.4
 adding new flag parameters caused a glitch in using "Labels" , Fixed.
 Using GTk was not working well, what with all maner of gadget layout warning messages
@@ -20,7 +29,7 @@ Opps, bugfix , i'd commented out the bit where a button send a message for testi
 uncomment it again so buttons were not reacting. fixed.
 
 V1.5.1
-Some minor edits/aditions to help texts.
+Some minor edits/additions to help texts.
 Now compiled on the latest stable gambas 3.15 , backward compatibility is enabled for it to work on
 any gambas version above 3.8 though.
 
