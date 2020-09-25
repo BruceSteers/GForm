@@ -8,6 +8,7 @@ Added 'collect' mode or return=end. This mode does not give out any messages dur
 the window is closed returns all the settable fields and their values to the shell at once. Works like
 the other return=mode options in that ANY normal button will auto-close the window. to override this action
 use the noclose or noquit flag.
+Updated help docs to include new flags/commands.
 
 V1.5.4
 adding new flag parameters caused a glitch in using "Labels" , Fixed.
